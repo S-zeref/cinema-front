@@ -1,0 +1,62 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">  
+            <ul *ngIf="villes" class="list-group">
+                <li [ngClass]="v==currentville? 'active':''" *ngFor="let v of villes._embedded.villes"
+                 class="list-group-item clickable" (click)="ongetcinemas(v)">
+                    {{v.name}}
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">Liste des cinémas</div>
+                <div class="panel-body">
+                    <ul *ngIf="cinemas" class="nav nav-pills">
+                        <li [ngClass]="c==currentcinema? 'active':''" *ngFor="let c of cinemas._embedded.cinemas" class="clickable">
+                           <a (click)="ongetsalles(c)"> {{c.name}}</a>
+                        </li>
+                    </ul>
+                    <div class="row" *ngIf="salles">
+                        <div *ngFor="let s of salles._embedded.salles">
+                            <div class="col-md-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading"> {{s.name}}</div>
+                                <div class="panel-body" *ngIf="s.projections">
+                                    <div class="row">
+                                    <div class="col-md-5">
+                                        <img width="189" height="267" src="{{cinemaservice.host+'/imagefilm/'+s.projections._embedded.projections[0].film.id}}">
+                                    </div>
+                                    <div class="col-md-7">
+                                        <ul class="lis-group">
+                                            <li class="list-group-item">
+                                                Séances:
+                                            </li>
+                                            <li [ngClass]="p==currentprojection? 'active':''" (click)="ongetplaces(p)" *ngFor="let p of s.projections._embedded.projections" class="list-group-item clickable">
+                                                {{p.seance.heuredebut}} => Prix : {{p.prix|number:'0.00'}} DH
+
+                                            </li>
+                                        </ul>
+
+                                    </div>
+                                    </div>
+                                    <div *ngIf="currentprojection">
+                                        <div *ngIf="s.id==currentprojection.salle.id">
+                                            <div class="row" *ngIf="currentprojection.tickets">
+                                                <button class="btn btn-success margin" *ngFor="let t of currentprojection.tickets._embedded.tickets">
+                                                    {{t.place.numero}}
+                                                </button>   
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
